@@ -3,9 +3,11 @@
 // ---------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Hl7.Fhir.Model;
+using Hl7.Fhir.Serialization;
+using LondonFhirService.Providers.FHIR.R4.TestDataService.Models.Brokers.FhirFiles.Exceptions;
 
 namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.FhirFiles
 {
@@ -18,32 +20,22 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.FhirFiles
             this.fhirTestDataPath = Path.Combine(AppContext.BaseDirectory, testDataFolderName);
         }
 
-        public List<Bundle> RetrieveAllFhirBundles()
+        public Bundle RetrieveFhirBundle(string nhsNumber)
         {
-            var fhirBundles = new List<Bundle>();
+            Bundle fhirBundle = null;
 
-            string[] jsonFiles = Directory.GetFiles(fhirTestDataPath, "*.json");
+            string jsonFilePath = Directory.GetFiles(fhirTestDataPath, $"{nhsNumber}.json").FirstOrDefault();
 
-            foreach (string filePath in jsonFiles)
+            if (jsonFilePath is null)
             {
-                try
-                {
-                    string fileContent = File.ReadAllText(filePath);
-                    var parser = new Hl7.Fhir.Serialization.FhirJsonParser();
-                    Bundle bundle = parser.Parse<Bundle>(fileContent);
-
-                    if (bundle is not null)
-                    {
-                        fhirBundles.Add(bundle);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    continue;
-                }
+                throw new TestPatientNotFoundException($"Test patient with NhsNumber {nhsNumber} not found");
             }
 
-            return fhirBundles;
+            string fileContent = File.ReadAllText(jsonFilePath);
+            var parser = new FhirJsonParser();
+            fhirBundle = parser.Parse<Bundle>(fileContent);
+
+            return fhirBundle;
         }
     }
 }
