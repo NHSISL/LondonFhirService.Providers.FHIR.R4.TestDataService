@@ -53,4 +53,10 @@
 	  <PackageReference Include="Xeption" Version="2.8.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Data\0000000000.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
