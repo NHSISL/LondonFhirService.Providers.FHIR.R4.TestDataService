@@ -1,7 +1,4 @@
 <Solution>
-  <Folder Name="/Functions/">
-    <Project Path="LondonFhirService.Providers.FHIR.R4.TestDataService.Functions/LondonFhirService.Providers.FHIR.R4.TestDataService.Functions.csproj" Id="ee861000-7485-4d49-b61f-9c591b88a6ff" />
-  </Folder>
   <Folder Name="/Infrastructure/">
     <Project Path="LondonFhirService.Providers.FHIR.R4.TestDataService.Infrastructure/LondonFhirService.Providers.FHIR.R4.TestDataService.Infrastructure.csproj" />
   </Folder>

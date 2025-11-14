@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "LondonFhirService.Providers.FHIR.R4.TestDataService.Functions": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7111",
-      "launchBrowser": false
-    }
-  }
-}
