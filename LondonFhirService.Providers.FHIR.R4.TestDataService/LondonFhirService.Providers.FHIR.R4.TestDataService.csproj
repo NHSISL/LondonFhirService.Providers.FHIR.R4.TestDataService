@@ -50,6 +50,8 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Hl7.Fhir.R4" Version="5.12.1" />
+	  <PackageReference Include="LondonFhirService.Providers.FHIR.R4.Abstractions" Version="0.4.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.9" />
 	  <PackageReference Include="Xeption" Version="2.8.0" />
 	</ItemGroup>
 
