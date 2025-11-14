@@ -39,15 +39,17 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Extensions.Excepti
 
                 foreach (DictionaryEntry entry in exception.Data)
                 {
-                    string errorSummary = ((List<string>)entry.Value)
-                        .Select((value) => value)
-                        .Aggregate((current, next) => current + ", " + next);
-
-                    string line = $"{entry.Key} => {errorSummary};  ";
-
-                    if (!validationSummary.ToString().Contains(line))
+                    if (entry.Value is List<string> errorList)
                     {
-                        validationSummary.Append(line);
+                        string errorSummary = errorList
+                            .Aggregate((current, next) => current + ", " + next);
+
+                        string line = $"{entry.Key} => {errorSummary};  ";
+
+                        if (!validationSummary.ToString().Contains(line))
+                        {
+                            validationSummary.Append(line);
+                        }
                     }
                 }
 

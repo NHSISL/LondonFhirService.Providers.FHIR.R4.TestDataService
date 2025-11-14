@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using LondonFhirService.Providers.FHIR.R4.Abstractions.Models.Resources;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.FhirFiles;
+using LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.Loggings;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Models.TdsHttp;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Providers;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Resources;
@@ -39,8 +40,6 @@ internal class Program
             })
             .ConfigureServices((context, services) =>
             {
-                var configuration = context.Configuration;
-
                 TdsConfigurations tdsConfigurations = new TdsConfigurations
                 {
                     Source = "Test Data Service",
@@ -63,6 +62,7 @@ internal class Program
     private static void AddBrokers(IServiceCollection services)
     {
         services.AddTransient<IFhirFileBroker, FhirFileBroker>();
+        services.AddTransient<ILoggingBroker, LoggingBroker>();
     }
 
     private static void AddFoundationServices(IServiceCollection services)

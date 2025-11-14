@@ -40,12 +40,18 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Functions
             string id,
             CancellationToken cancellationToken)
         {
-            await loggingBroker.LogInformationAsync(
+            loggingBroker.LogInformation(
                 $"Patient $everything operation invoked for Patient ID: {id}");
 
             try
             {
-                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                string requestBody;
+
+                using (var reader = new StreamReader(req.Body))
+                {
+                    requestBody = await reader.ReadToEndAsync(cancellationToken);
+                }
+
                 var fhirJsonParser = new FhirJsonParser();
                 Parameters parameters = fhirJsonParser.Parse<Parameters>(requestBody);
 
@@ -73,14 +79,14 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Functions
                 response.Headers.Add("Content-Type", "application/fhir+json");
                 await response.WriteStringAsync(bundleJson);
 
-                await loggingBroker.LogInformationAsync(
+                loggingBroker.LogInformation(
                     $"Successfully returned bundle for Patient ID: {id}");
 
                 return response;
             }
             catch (Exception ex)
             {
-                await loggingBroker.LogErrorAsync(ex);
+                loggingBroker.LogError(ex);
                 throw;
             }
         }

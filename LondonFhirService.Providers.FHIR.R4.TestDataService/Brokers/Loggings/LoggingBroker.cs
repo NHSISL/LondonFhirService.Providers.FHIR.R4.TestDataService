@@ -3,7 +3,6 @@
 // ---------------------------------------------------------
 
 using System;
-using System.Threading.Tasks;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Extensions.Exceptions;
 using Microsoft.Extensions.Logging;
 
@@ -16,22 +15,22 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.Loggings
         public LoggingBroker(ILogger<LoggingBroker> logger) =>
             this.logger = logger;
 
-        public async ValueTask LogInformationAsync(string message) =>
+        public void LogInformation(string message) =>
             logger.LogInformation(message);
 
-        public async ValueTask LogTraceAsync(string message) =>
+        public void LogTrace(string message) =>
             logger.LogTrace(message);
 
-        public async ValueTask LogDebugAsync(string message) =>
+        public void LogDebug(string message) =>
             logger.LogDebug(message);
 
-        public async ValueTask LogWarningAsync(string message) =>
+        public void LogWarning(string message) =>
             logger.LogWarning(message);
 
-        public async ValueTask LogErrorAsync(Exception exception) =>
+        public void LogError(Exception exception) =>
             logger.LogError(exception, $"{exception.Message} {exception.GetValidationSummary()}");
 
-        public async ValueTask LogCriticalAsync(Exception exception) =>
+        public void LogCritical(Exception exception) =>
             logger.LogCritical(exception, $"{exception.Message} {exception.GetValidationSummary()}");
     }
 }

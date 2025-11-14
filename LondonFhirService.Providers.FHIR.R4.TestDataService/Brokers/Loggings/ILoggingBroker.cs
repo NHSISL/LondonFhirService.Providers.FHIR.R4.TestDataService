@@ -3,17 +3,16 @@
 // ---------------------------------------------------------
 
 using System;
-using System.Threading.Tasks;
 
 namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.Loggings
 {
     public interface ILoggingBroker
     {
-        ValueTask LogInformationAsync(string message);
-        ValueTask LogTraceAsync(string message);
-        ValueTask LogDebugAsync(string message);
-        ValueTask LogWarningAsync(string message);
-        ValueTask LogErrorAsync(Exception exception);
-        ValueTask LogCriticalAsync(Exception exception);
+        void LogInformation(string message);
+        void LogTrace(string message);
+        void LogDebug(string message);
+        void LogWarning(string message);
+        void LogError(Exception exception);
+        void LogCritical(Exception exception);
     }
 }
