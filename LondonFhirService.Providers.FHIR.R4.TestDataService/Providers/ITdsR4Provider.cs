@@ -7,6 +7,5 @@ using LondonFhirService.Providers.FHIR.R4.Abstractions;
 namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Providers
 {
     public interface ITdsR4Provider : IFhirProvider
-    {
-    }
+    { }
 }
