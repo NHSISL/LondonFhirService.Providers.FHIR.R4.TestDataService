@@ -4,12 +4,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Text.Json;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.FhirFiles;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patients;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundations.Patients
 {
@@ -82,6 +86,70 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             string serializedBundle = fhirJsonSerializer.SerializeToString(bundle);
 
             return serializedBundle;
+        }
+
+        public static TheoryData<Exception> DependencyValidationExceptions()
+        {
+            string randomMessage = GetRandomString();
+            string exceptionMessage = randomMessage;
+            var innerException = new Xeption(exceptionMessage);
+
+            return new TheoryData<Exception>
+            {
+                new ArgumentNullException(
+                    message: randomMessage,
+                    innerException),
+
+                 new ArgumentException(
+                    message: randomMessage,
+                    innerException),
+
+                  new PathTooLongException(
+                    message: randomMessage,
+                    innerException),
+
+                  new FileNotFoundException(
+                    message: randomMessage,
+                    innerException),
+
+                  new DirectoryNotFoundException(
+                    message: randomMessage,
+                    innerException),
+
+                  new NotSupportedException(
+                    message: randomMessage,
+                    innerException),
+
+                  new JsonException(
+                    message: randomMessage,
+                    innerException),
+            };
+        }
+
+        public static TheoryData<Exception> DependencyExceptions()
+        {
+            string randomMessage = GetRandomString();
+            string exceptionMessage = randomMessage;
+            var innerException = new Xeption(exceptionMessage);
+
+            return new TheoryData<Exception>
+            {
+                new DecoderFallbackException(
+                    message: randomMessage,
+                    innerException),
+
+                new UnauthorizedAccessException(
+                    message: randomMessage,
+                    innerException),
+
+                new IOException(
+                    message: randomMessage,
+                    innerException),
+
+                new InvalidOperationException(
+                    message: randomMessage,
+                    innerException),
+            };
         }
     }
 }

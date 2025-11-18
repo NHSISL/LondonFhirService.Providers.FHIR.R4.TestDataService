@@ -20,7 +20,8 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patien
         public PatientService(IFhirFileBroker fhirFileBroker) =>
             this.fhirFileBroker = fhirFileBroker;
 
-        public async ValueTask<Bundle> EverythingAsync(string id, CancellationToken cancellationToken = default)
+        public ValueTask<Bundle> EverythingAsync(string id, CancellationToken cancellationToken = default) =>
+        TryCatch(async () =>
         {
             string testDataDirectory = $"{AppContext.BaseDirectory}/Data";
             string jsonFilePath = Directory.GetFiles(testDataDirectory, $"{id}.json").FirstOrDefault();
@@ -29,6 +30,6 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patien
             Bundle fhirBundle = parser.Parse<Bundle>(fileContent);
 
             return fhirBundle;
-        }
+        });
     }
 }
