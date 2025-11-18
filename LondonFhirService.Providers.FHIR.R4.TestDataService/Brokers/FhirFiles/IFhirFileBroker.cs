@@ -8,6 +8,6 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.FhirFiles
 {
     public interface IFhirFileBroker
     {
-        ValueTask<string> RetrieveFhirBundleAsync(string nhsNumber);
+        ValueTask<string> RetrieveFhirBundleAsync(string fileName);
     }
 }
