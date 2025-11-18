@@ -5,6 +5,7 @@
 using System.Threading;
 using FluentAssertions;
 using Hl7.Fhir.Model;
+using LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patients;
 using Moq;
 using Task = System.Threading.Tasks.Task;
 
@@ -18,15 +19,26 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             // given
             string randomId = GetRandomString();
             string inputId = randomId;
-            string inputFilePath = randomId;
+            string randomFilePath = GetRandomString();
+            string outputFilePath = randomFilePath;
             CancellationToken inputCancellationToken = default;
             Bundle randomBundle = CreateRandomBundle();
             Bundle expectedBundle = randomBundle;
             string outputContent = GetStringFromBundle(randomBundle);
 
+            var patientServiceMock = new Mock<PatientService>(
+                this.fhirFileBrokerMock.Object)
+            { CallBase = true };
+
+            patientServiceMock.Setup(service =>
+                service.GetPatientFilePathAsync(inputId))
+                    .ReturnsAsync(outputFilePath);
+
             this.fhirFileBrokerMock.Setup(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath))
+                broker.RetrieveFhirBundleAsync(outputFilePath))
                     .ReturnsAsync(outputContent);
+
+            var patientService = patientServiceMock.Object;
 
             // when
             Bundle actualBundle =
@@ -37,10 +49,15 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             // then
             actualBundle.Should().BeEquivalentTo(expectedBundle);
 
-            this.fhirFileBrokerMock.Verify(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath),
+            patientServiceMock.Verify(service =>
+                service.GetPatientFilePathAsync(inputId),
                     Times.Once);
 
+            this.fhirFileBrokerMock.Verify(broker =>
+                broker.RetrieveFhirBundleAsync(outputFilePath),
+                    Times.Once);
+
+            patientServiceMock.VerifyNoOtherCalls();
             this.fhirFileBrokerMock.VerifyNoOtherCalls();
         }
     }

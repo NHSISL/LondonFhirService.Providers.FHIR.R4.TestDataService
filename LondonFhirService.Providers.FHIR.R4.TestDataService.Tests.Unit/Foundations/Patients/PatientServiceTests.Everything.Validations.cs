@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Hl7.Fhir.Model;
+using LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patients;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Models.Foundations.Patients.Exceptions;
 using Moq;
 using Task = System.Threading.Tasks.Task;
@@ -25,8 +26,11 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             // given
             string inputId = invalidText;
             string randomFilePath = inputId;
-            string inputFilePath = randomFilePath;
             CancellationToken inputCancellationToken = default;
+
+            var patientServiceMock = new Mock<PatientService>(
+               this.fhirFileBrokerMock.Object)
+            { CallBase = true };
 
             InvalidArgumentPatientServiceException invalidArgumentPatientServiceException =
                 new InvalidArgumentPatientServiceException(
@@ -36,14 +40,12 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
                 key: "id",
                 values: "Text is invalid");
 
-            this.fhirFileBrokerMock.Setup(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath))
-                    .ThrowsAsync(invalidArgumentPatientServiceException);
-
             var expectedPatientValidationException =
                 new PatientValidationException(
                     "Patient validation error occurred, please fix the errors and try again.",
                     invalidArgumentPatientServiceException);
+
+            var patientService = patientServiceMock.Object;
 
             // when
             ValueTask<Bundle> everythingTask = patientService.EverythingAsync(

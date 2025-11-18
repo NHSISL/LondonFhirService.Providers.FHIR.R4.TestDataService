@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Hl7.Fhir.Model;
+using LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patients;
 using LondonFhirService.Providers.FHIR.R4.TestDataService.Models.Foundations.Patients.Exceptions;
 using Moq;
 using Task = System.Threading.Tasks.Task;
@@ -23,11 +24,14 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             // given
             string randomId = GetRandomString();
             string inputId = randomId;
-            string inputFilePath = randomId;
             CancellationToken inputCancellationToken = default;
 
-            this.fhirFileBrokerMock.Setup(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath))
+            var patientServiceMock = new Mock<PatientService>(
+               this.fhirFileBrokerMock.Object)
+            { CallBase = true };
+
+            patientServiceMock.Setup(service =>
+                service.GetPatientFilePathAsync(inputId))
                     .ThrowsAsync(dependencyValidationException);
 
             var invalidDependencyPatientServiceException = new InvalidDependencyPatientServiceException(
@@ -38,6 +42,8 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
                 new PatientDependencyValidationException(
                     "Patient dependency validation error occurred, please fix the errors and try again.",
                     invalidDependencyPatientServiceException);
+
+            var patientService = patientServiceMock.Object;
 
             // when
             ValueTask<Bundle> everythingTask = patientService.EverythingAsync(
@@ -52,10 +58,11 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             actualPatientDependencyValidationException
                 .Should().BeEquivalentTo(expectedPatientDependencyValidationException);
 
-            this.fhirFileBrokerMock.Verify(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath),
+            patientServiceMock.Verify(broker =>
+                broker.GetPatientFilePathAsync(inputId),
                     Times.Once);
 
+            patientServiceMock.VerifyNoOtherCalls();
             this.fhirFileBrokerMock.VerifyNoOtherCalls();
         }
 
@@ -67,11 +74,14 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             // given
             string randomId = GetRandomString();
             string inputId = randomId;
-            string inputFilePath = randomId;
             CancellationToken inputCancellationToken = default;
 
-            this.fhirFileBrokerMock.Setup(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath))
+            var patientServiceMock = new Mock<PatientService>(
+               this.fhirFileBrokerMock.Object)
+            { CallBase = true };
+
+            patientServiceMock.Setup(service =>
+                service.GetPatientFilePathAsync(inputId))
                     .ThrowsAsync(dependencyException);
 
             var failedDependencyPatientServiceException = new FailedDependencyPatientServiceException(
@@ -82,6 +92,8 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
                 new PatientDependencyException(
                     "Patient dependency error occurred, please fix the errors and try again.",
                     failedDependencyPatientServiceException);
+
+            var patientService = patientServiceMock.Object;
 
             // when
             ValueTask<Bundle> everythingTask = patientService.EverythingAsync(
@@ -96,8 +108,8 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             actualPatientDependencyException
                 .Should().BeEquivalentTo(expectedPatientDependencyException);
 
-            this.fhirFileBrokerMock.Verify(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath),
+            patientServiceMock.Verify(broker =>
+                broker.GetPatientFilePathAsync(inputId),
                     Times.Once);
 
             this.fhirFileBrokerMock.VerifyNoOtherCalls();
@@ -110,11 +122,14 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             Exception someException = new Exception();
             string randomId = GetRandomString();
             string inputId = randomId;
-            string inputFilePath = randomId;
             CancellationToken inputCancellationToken = default;
 
-            this.fhirFileBrokerMock.Setup(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath))
+            var patientServiceMock = new Mock<PatientService>(
+               this.fhirFileBrokerMock.Object)
+            { CallBase = true };
+
+            patientServiceMock.Setup(service =>
+                service.GetPatientFilePathAsync(inputId))
                     .ThrowsAsync(someException);
 
             var failedPatientServiceException = new FailedPatientServiceException(
@@ -126,6 +141,8 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
                 new PatientServiceException(
                     "Patient service error occurred, please contact support.",
                     failedPatientServiceException);
+
+            var patientService = patientServiceMock.Object;
 
             // when
             ValueTask<Bundle> everythingTask = patientService.EverythingAsync(
@@ -140,9 +157,9 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             actualPatientServiceException
                 .Should().BeEquivalentTo(expectedPatientServiceException);
 
-            this.fhirFileBrokerMock.Verify(broker =>
-                broker.RetrieveFhirBundleAsync(inputFilePath),
-                    Times.Once);
+            patientServiceMock.Verify(broker =>
+                 broker.GetPatientFilePathAsync(inputId),
+                     Times.Once);
 
             this.fhirFileBrokerMock.VerifyNoOtherCalls();
         }

@@ -65,7 +65,9 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patien
             catch (DirectoryNotFoundException directoryNotFoundException)
             {
                 InvalidDependencyPatientServiceException invalidDependencyPatientServiceException =
-                    new InvalidDependencyPatientServiceException("Invalid dependency error.", directoryNotFoundException);
+                    new InvalidDependencyPatientServiceException(
+                        "Invalid dependency error.",
+                        directoryNotFoundException);
 
                 throw await CreateAndLogDependencyValidationExceptionAsync(invalidDependencyPatientServiceException);
             }

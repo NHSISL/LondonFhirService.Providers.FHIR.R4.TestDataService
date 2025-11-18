@@ -56,6 +56,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Update="Data\0000000000.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

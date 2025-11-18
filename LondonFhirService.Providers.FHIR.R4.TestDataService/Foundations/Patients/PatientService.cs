@@ -24,13 +24,20 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patien
         TryCatch(async () =>
         {
             await ValidateEverythingParams(id);
-            string testDataDirectory = $"{AppContext.BaseDirectory}/Data";
-            string jsonFilePath = Directory.GetFiles(testDataDirectory, $"{id}.json").FirstOrDefault();
-            string fileContent = await this.fhirFileBroker.RetrieveFhirBundleAsync(id);
+            string jsonFilePath = await GetPatientFilePathAsync(id);
+            string fileContent = await this.fhirFileBroker.RetrieveFhirBundleAsync(jsonFilePath);
             var parser = new FhirJsonParser();
             Bundle fhirBundle = parser.Parse<Bundle>(fileContent);
 
             return fhirBundle;
         });
+
+        virtual internal async ValueTask<string> GetPatientFilePathAsync(string id)
+        {
+            string testDataDirectory = $"{AppContext.BaseDirectory}/Data";
+            string jsonFilePath = Directory.GetFiles(testDataDirectory, $"{id}.json").FirstOrDefault();
+
+            return jsonFilePath;
+        }
     }
 }
