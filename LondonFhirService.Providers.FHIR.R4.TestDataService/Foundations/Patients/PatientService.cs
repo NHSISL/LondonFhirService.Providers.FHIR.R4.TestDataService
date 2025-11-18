@@ -23,6 +23,7 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Foundations.Patien
         public ValueTask<Bundle> EverythingAsync(string id, CancellationToken cancellationToken = default) =>
         TryCatch(async () =>
         {
+            await ValidateEverythingParams(id);
             string testDataDirectory = $"{AppContext.BaseDirectory}/Data";
             string jsonFilePath = Directory.GetFiles(testDataDirectory, $"{id}.json").FirstOrDefault();
             string fileContent = await this.fhirFileBroker.RetrieveFhirBundleAsync(id);

@@ -9,9 +9,9 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Brokers.FhirFiles
 {
     public class FhirFileBroker : IFhirFileBroker
     {
-        public async ValueTask<string> RetrieveFhirBundleAsync(string filePath)
+        public async ValueTask<string> RetrieveFhirBundleAsync(string fileName)
         {
-            return File.ReadAllText(filePath);
+            return File.ReadAllText(fileName);
         }
     }
 }

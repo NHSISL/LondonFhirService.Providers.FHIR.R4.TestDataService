@@ -21,8 +21,9 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             Exception dependencyValidationException)
         {
             // given
-            string randomFilePath = GetRandomString();
-            string inputFilePath = randomFilePath;
+            string randomId = GetRandomString();
+            string inputId = randomId;
+            string inputFilePath = randomId;
             CancellationToken inputCancellationToken = default;
 
             this.fhirFileBrokerMock.Setup(broker =>
@@ -40,7 +41,7 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
 
             // when
             ValueTask<Bundle> everythingTask = patientService.EverythingAsync(
-                id: inputFilePath,
+                id: inputId,
                 cancellationToken: inputCancellationToken);
 
             PatientDependencyValidationException actualPatientDependencyValidationException =
@@ -64,8 +65,9 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             Exception dependencyException)
         {
             // given
-            string randomFilePath = GetRandomString();
-            string inputFilePath = randomFilePath;
+            string randomId = GetRandomString();
+            string inputId = randomId;
+            string inputFilePath = randomId;
             CancellationToken inputCancellationToken = default;
 
             this.fhirFileBrokerMock.Setup(broker =>
@@ -83,7 +85,7 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
 
             // when
             ValueTask<Bundle> everythingTask = patientService.EverythingAsync(
-                id: inputFilePath,
+                id: inputId,
                 cancellationToken: inputCancellationToken);
 
             PatientDependencyException actualPatientDependencyException =
@@ -106,8 +108,9 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
         {
             // given
             Exception someException = new Exception();
-            string randomFilePath = GetRandomString();
-            string inputFilePath = randomFilePath;
+            string randomId = GetRandomString();
+            string inputId = randomId;
+            string inputFilePath = randomId;
             CancellationToken inputCancellationToken = default;
 
             this.fhirFileBrokerMock.Setup(broker =>
@@ -126,7 +129,7 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
 
             // when
             ValueTask<Bundle> everythingTask = patientService.EverythingAsync(
-                id: inputFilePath,
+                id: inputId,
                 cancellationToken: inputCancellationToken);
 
             PatientServiceException actualPatientServiceException =

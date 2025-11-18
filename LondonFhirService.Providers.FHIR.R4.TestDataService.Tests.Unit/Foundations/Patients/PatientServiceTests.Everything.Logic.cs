@@ -16,8 +16,9 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
         public async Task ShouldEverythingAsync()
         {
             // given
-            string randomFilePath = GetRandomString();
-            string inputFilePath = randomFilePath;
+            string randomId = GetRandomString();
+            string inputId = randomId;
+            string inputFilePath = randomId;
             CancellationToken inputCancellationToken = default;
             Bundle randomBundle = CreateRandomBundle();
             Bundle expectedBundle = randomBundle;
@@ -30,7 +31,7 @@ namespace LondonFhirService.Providers.FHIR.R4.TestDataService.Tests.Unit.Foundat
             // when
             Bundle actualBundle =
                 await patientService.EverythingAsync(
-                    id: inputFilePath,
+                    id: inputId,
                     cancellationToken: inputCancellationToken);
 
             // then
